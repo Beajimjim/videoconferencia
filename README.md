@@ -72,3 +72,62 @@ Este proyecto es una aplicación de videoconferencia basada en **Flask**, **Sock
 - Incluir chat de texto en tiempo real.
 - Optimizar el uso de ancho de banda con técnicas de compresión de imágenes.
 
+
+
+## Funcionamiento
+
+### Frontend (index.html)
+
+El archivo `index.html` proporciona la interfaz de usuario de la videoconferencia:
+
+- Solicita acceso a la cámara del usuario y captura el video.
+- Dibuja los frames en un canvas en tiempo real.
+- Envía cada frame al servidor mediante Socket.IO.
+- Recibe y renderiza videos de otros usuarios en su propia pantalla.
+- Muestra notificaciones cuando un usuario se conecta o desconecta.
+
+### Elementos clave en el HTML
+
+- **Canvas:** Representa la transmisión de cada usuario en la videoconferencia.
+- **Socket.IO:** Permite la comunicación en tiempo real entre los usuarios.
+- **JavaScript:** Gestiona la transmisión de video y la interacción con el servidor.
+
+### Backend (servidor.py)
+
+Este archivo gestiona la conexión de los usuarios y el reenvío de los frames de video.
+
+#### Funciones principales
+
+**Manejo de conexiones y desconexiones**
+
+- Al conectarse, el usuario recibe un identificador único (SID) y se notifica a los demás.
+- Al desconectarse, se elimina de la lista de usuarios y se informa a los demás.
+
+**Recepción y reenvío de frames de video**
+
+- Cuando un usuario envía un frame (`send_video`), el servidor lo recibe y lo reenvía a todos los demás usuarios conectados (`receive_video`).
+- Ejecuta un servidor en Flask con WebSockets a través de Socket.IO, permitiendo la comunicación en tiempo real.
+
+## Tecnologías Utilizadas
+
+- **Flask:** Servidor web en Python.
+- **Flask-SocketIO:** Comunicación en tiempo real con WebSockets.
+- **CORS:** Para permitir conexiones desde diferentes dominios.
+
+## Resumen del Flujo de la Videoconferencia
+
+1. El usuario abre la página y se le solicita acceso a la cámara.
+2. Se captura el video en un canvas y se convierte en imágenes (Base64).
+3. Se envían los frames al servidor usando Socket.IO.
+4. El servidor recibe los frames y los reenvía a los demás usuarios conectados.
+5. Los otros usuarios reciben los frames y los dibujan en su propio canvas.
+6. Cuando un usuario se conecta o desconecta, se muestra una notificación.
+
+## Posibles Mejoras y Optimización
+
+- Utilizar WebRTC en lugar de imágenes para mejorar la fluidez del video.
+- Implementar codificación de video eficiente (H.264, VP9) en lugar de Base64.
+- Mejorar la gestión de sesiones y autenticación de usuarios.
+
+
+
